@@ -1,6 +1,6 @@
 {
   "name": "@jzone/react-request-hook",
-  "description": "🐶 React hook for custom request，compatible with various lib, support redux",
+  "description": "🐶 React hook for custom request，compatible with various lib, support redux. includes other useful hooks",
   "version": "1.2.0",
   "license": "MIT",
   "author": "纳兹",
@@ -11,6 +11,11 @@
     "dist",
     "src"
   ],
+  "homepage": "https://github.com/zhixiaoqiang/react-hooks.git",
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/zhixiaoqiang/react-hooks.git"
+  },
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
