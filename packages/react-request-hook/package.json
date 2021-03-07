@@ -1,0 +1,70 @@
+{
+  "name": "@jzone/react-request-hook",
+  "description": "🐶 React hook for custom request，compatible with various lib, support redux",
+  "version": "1.1.2",
+  "license": "MIT",
+  "author": "纳兹",
+  "main": "dist/index.js",
+  "module": "dist/react-request-hook.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "keywords": [
+    "react-hooks",
+    "react-hook",
+    "hook",
+    "react",
+    "request"
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.10.0",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.1",
+    "husky": "^5.1.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "size-limit": "^4.10.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1 || ^17.0.0",
+    "react-dom": "^16.13.1 || ^17.0.0"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "size-limit": [
+    {
+      "path": "dist/react-request-hook.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/react-request-hook.esm.js",
+      "limit": "10 KB"
+    }
+  ]
+}
