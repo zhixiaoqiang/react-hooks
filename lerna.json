@@ -11,7 +11,7 @@
       "registry": "https://www.npmjs.com/"
     },
     "version": {
-      "allowBranch": "master",
+      "allowBranch": "main",
       "includeMergedTags": true,
       "message": "chore(release): publish new version [skip ci]",
       "conventionalCommits": true
