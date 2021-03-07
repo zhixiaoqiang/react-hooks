@@ -1,56 +1,109 @@
-import { useReducer, useCallback } from 'react'
+import { useReducer, useCallback, useRef, useEffect, MutableRefObject } from 'react'
 
-const FETCH_REQUEST = 'FETCH_REQUEST'
-const FETCH_SUCCESS = 'FETCH_SUCCESS'
-const FETCH_FAILURE = 'FETCH_FAILURE'
+import { actionTypeEnum, IState, IAction, Unpacked, ErrorType } from './types'
 
-const fetchDataReducer = (initState, action) => {
+/**
+ * @description reducer function
+ * @author nazi
+ * @date 2021-03-07
+ * @template T
+ * @param {T} state
+ * @param {IAction<T>} action
+ * @returns {(IState<any> | ErrorType)}
+ */
+function reducer<T extends IState<T>> (state: T, action: IAction<T>): IState<any> | ErrorType {
   switch (action.type) {
-    case FETCH_REQUEST:
-      return {
+    case actionTypeEnum.REQUEST_INIT:
+      return { 
         data: null,
-        ...initState,
-        isLoading: true,
+        ...state,
+        loading: true,
         error: null,
-      }
-    case FETCH_SUCCESS:
+       }
+    case actionTypeEnum.REQUEST_SUCCESS:
       return {
-        ...initState,
-        isLoading: false,
+        ...state,
+        loading: false,
         error: null,
         data: action.payload,
-      }
-    case FETCH_FAILURE:
-      return {
-        ...initState,
-        isLoading: false,
+       }
+    case actionTypeEnum.REQUEST_FAILURE:
+      return { 
+        ...state,
+        loading: false,
         error: action.error,
-      }
+       }
     default:
-      throw new Error()
+      throw new Error('error')
   }
 }
 
 /**
- * @param {*} requestFn custom fetch function, e.g: (data) => axios('/xxx', data)
- * @param {*} initState setInit state, defaultValue: undefined
- * @return {array} [state, memoizedFetchDateApi] state: { data, isLoading, error, ... }
+ * @description request function
+ * @author nazi
+ * @date 2021-03-07
+ * @template T
+ * @param {T} instance
+ * @param {(action: IAction<ReturnType<T>>) => void} dispatch
+ * @param {MutableRefObject<number>} currentIndex
+ * @returns {Promise<ReturnType<T>>}
  */
-const useRequest = (requestFn, initState) => {
-  const [state, dispatch] = useReducer(fetchDataReducer, initState)
-
-  const fetchData = async (params) => {
-    dispatch({ type: FETCH_REQUEST })
-    try {
-      const result = await requestFn(params)
-      dispatch({ type: FETCH_SUCCESS, payload: result })
-    } catch (error) {
-      dispatch({ type: FETCH_FAILURE, error })
+async function request<T extends (
+...args: any[]) => any> (
+  instance: T,
+  dispatch: (action: IAction<ReturnType<T>>) => void,
+  currentIndex: MutableRefObject<number>,
+): Promise<ReturnType<T>> {
+  const prevCurrentIndex = currentIndex.current
+  try {
+    dispatch({ type: actionTypeEnum.REQUEST_INIT })
+    const result = await instance()
+    if (prevCurrentIndex === currentIndex.current) {
+      dispatch({ type: actionTypeEnum.REQUEST_SUCCESS, payload: result })
     }
+    return result
+  } catch (error) {
+    if (prevCurrentIndex === currentIndex.current) {
+      dispatch({ type: actionTypeEnum.REQUEST_FAILURE, error })
+    }
+    console.error(error)
+    return error
+  }
+}
+
+/**
+ * @description main function
+ * @author nazi
+ * @date 2021-03-07
+ * @template T
+ * @param {T} instance
+ * @param {IState<Unpacked<ReturnType<T>>>} [initialState={}]
+ * @returns 
+ */
+function useRequest<T extends (
+...args: any[]) => any> (
+  instance: T,
+  initialState: IState<Unpacked<ReturnType<T>>> = {},
+) {
+
+  const currentIndex = useRef(0)
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const requestCallback = (...args: Parameters<T>) => {
+    currentIndex.current += 1
+    return request((): Unpacked<ReturnType<T>> => instance(...args), dispatch, currentIndex)
   }
 
-  const memoizedFetchDateApi = useCallback(fetchData, [])
-  return [state || {}, memoizedFetchDateApi]
+  useEffect(() => {
+    return () => {
+      currentIndex.current += 1
+    }
+  }, [])
+
+  const memoizedRequestCallback = useCallback(requestCallback, [])
+
+  return [state, memoizedRequestCallback]
 }
 
 export default useRequest
