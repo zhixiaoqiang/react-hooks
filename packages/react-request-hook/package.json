@@ -1,7 +1,7 @@
 {
   "name": "@jzone/react-request-hook",
   "description": "🐶 React hook for custom request，compatible with various lib, support redux. includes other useful hooks",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "author": "纳兹",
   "main": "dist/index.js",
