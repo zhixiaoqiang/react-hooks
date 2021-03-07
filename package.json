@@ -1,0 +1,40 @@
+{
+  "name": "react-hooks",
+  "version": "0.0.0",
+  "private": true,
+  "description": "react-hooks",
+  "homepage": "https://github.com/zhixiaoqiang/react-hooks.git",
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/zhixiaoqiang/react-hooks.git"
+  },
+  "license": "MIT",
+  "author": "纳兹 <nazi@dian.so>",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "clean": "lerna clean --yes",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx packages/",
+    "release": "lerna publish",
+    "sort-package": "sort-package-json 'package.json' 'packages/*/package.json'",
+    "test": "yarn lint && lerna run build && lerna run test:coverage",
+    "test:coverage": "lerna run test:coverage",
+    "test:update": "lerna run test:update",
+    "commit": "cz"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "commitizen": "^4.2.3",
+    "cz-lerna-changelog": "^2.0.3",
+    "husky": "^5.1.3",
+    "lerna": "^4.0.0",
+    "sort-package-json": "^1.49.0",
+    "tsdx": "^0.14.1",
+    "typescript": "^4.2.3"
+  }
+}

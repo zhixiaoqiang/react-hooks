@@ -1,0 +1,22 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "ignoreChanges": ["{__tests__,tests}/**/*.{js,jsx,ts,tsx}", "*.mdx", "*.md"],
+      "message": "chore(release): publish [skip ci]",
+      "registry": "https://www.npmjs.com/"
+    },
+    "version": {
+      "allowBranch": "master",
+      "includeMergedTags": true,
+      "message": "chore(release): publish new version [skip ci]",
+      "conventionalCommits": true
+    }
+  },
+  "version": "independent"
+
+}
